@@ -32,6 +32,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import java.util.List;
  * @since 2017/4/1
  */
 @Configuration
-@MapperScan({"com.baomidou.mybatisplus.test.base.mapper.commons", "com.baomidou.mybatisplus.test.base.mapper.pg"})
+@MapperScan({"com.baomidou.mybatisplus.test.base.mapper.commons", "com.baomidou.mybatisplus.test.postgres.mapper"})
 public class MybatisPlusConfig {
 
     @Bean("mybatisSqlSession")
@@ -55,6 +56,9 @@ public class MybatisPlusConfig {
         sqlSessionFactory.setDataSource(dataSource);
         /* 枚举扫描 */
         sqlSessionFactory.setTypeEnumsPackage("com.baomidou.mybatisplus.test.base.enums");
+        /* xml扫描 */
+        sqlSessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
+            .getResources("classpath:/mapper/*.xml"));
         /* entity扫描,mybatis的Alias功能 */
         MybatisConfiguration configuration = new MybatisConfiguration();
         configuration.setJdbcTypeForNull(JdbcType.NULL);
